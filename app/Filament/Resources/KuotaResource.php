@@ -20,7 +20,11 @@ class KuotaResource extends Resource
 {
     protected static ?string $model = Kuota::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Data Stok';
+    protected static ?string $modelLabel = 'Kuota';
+    protected static ?string $navigationIcon = 'heroicon-o-signal';
+    protected static ?string $navigationLabel = 'Daftar Kuota';
+    protected static ?string $slug = 'stok-kuota';
 
     public static function form(Form $form): Form
     {
@@ -35,10 +39,10 @@ class KuotaResource extends Resource
                     'Tri' => 'Tri',
                     'XL' => 'XL',
                     ]),
-                TextInput::make('nominal_paket'),
-                TextInput::make('masa_aktif'),
-                TextInput::make('harga_jual')->numeric(),
-                TextInput::make('harga_beli')->numeric(),
+                TextInput::make('nominal_paket')->label('Nominal Paket (GB)'),
+                TextInput::make('masa_aktif')->label('Masa Aktif (hari)'),
+                TextInput::make('harga_jual')->numeric()->label('Harga Jual per pcs'),
+                TextInput::make('harga_beli')->numeric()->label('Harga Beli per pcs'),
                 TextInput::make('jumlah')->numeric(),
             ]);
     }
@@ -47,12 +51,12 @@ class KuotaResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id'),
-                TextColumn::make('nama_provider'),
-                TextColumn::make('nominal_paket'),
-                TextColumn::make('masa_aktif'),
-                TextColumn::make('harga_jual'),
-                TextColumn::make('harga_beli'),
+                TextColumn::make('id')->label('ID'),
+                TextColumn::make('nama_provider')->sortable(),
+                TextColumn::make('nominal_paket')->label('Nominal Paket (GB)'),
+                TextColumn::make('masa_aktif')->label('Masa Aktif (hari)'),
+                TextColumn::make('harga_jual')->money('IDR')->label('Harga Jual per pcs'),
+                TextColumn::make('harga_beli')->money('IDR')->label('Harga Beli per pcs'),
                 TextColumn::make('jumlah'),
             ])
             ->filters([
