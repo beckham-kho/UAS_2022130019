@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\KuotaResource\Pages;
+namespace App\Filament\Resources\AccessoriesResource\Pages;
 
-use App\Filament\Resources\KuotaResource;
+use App\Filament\Resources\AccessoriesResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditKuota extends EditRecord
+class EditAccessories extends EditRecord
 {
-    protected static string $resource = KuotaResource::class;
+    protected static string $resource = AccessoriesResource::class;
 
     protected function getRedirectUrl(): ?string {
         return $this->getResource()::getUrl('index');

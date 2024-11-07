@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kuotas', function (Blueprint $table) {
+        Schema::create('pelanggans', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_provider');
-            $table->string('nominal_paket');
-            $table->string('masa_aktif');
-            $table->integer('harga_jual');
-            $table->integer('harga_beli');
-            $table->integer('jumlah')->nullable()->default(0);
+            $table->string('nama_konter');
+            $table->string('alamat_konter');
+            $table->string('nama_pemilik');
+            $table->string('no_telp');
+            $table->string('email')->nullable();
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kuotas');
+        Schema::dropIfExists('pelanggans');
     }
 };
