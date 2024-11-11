@@ -95,6 +95,7 @@ class FakturResource extends Resource
                 TextInput::make('harga_kuota')->label('Harga Kuota'),
                 TextInput::make('subtotal')->label('Subtotal'),
                 ])->label('Detail Kuota')
+                ->dehydrated(false)
                 ->live(),
                 Repeater::make('detailAccessories')
                     ->relationship()
@@ -134,6 +135,7 @@ class FakturResource extends Resource
                 TextInput::make('harga_accessories')->label('Harga Accessories'),
                 TextInput::make('subtotal')->label('Subtotal'),
                 ])
+                ->dehydrated(false)
                 ->label('Detail Accessories')
                 ->live(),
                 TextInput::make('total_qty')->numeric()->label('Total Quantity'),
