@@ -6,6 +6,7 @@ use App\Filament\Resources\FakturResource\Pages;
 use App\Filament\Resources\FakturResource\RelationManagers;
 use App\Models\Faktur;
 use App\Models\Kuota;
+use App\Models\Accessories;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -20,6 +21,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Set;
 use Filament\Forms\Get;
+use Filament\Forms\Components\Actions\Action;
 
 class FakturResource extends Resource
 {
@@ -59,10 +61,20 @@ class FakturResource extends Resource
                                 $set('harga_kuota', $kuota->harga_jual);
                             }
                         })
+                        ->afterStateHydrated(function($state, callable $set) {
+                            $kuota = Kuota::find($state);
+
+                            if($kuota) {
+                                $set('nama_provider', $kuota->nama_provider);
+                                $set('nominal_paket', $kuota->nominal_paket);
+                                $set('masa_aktif', $kuota->masa_aktif);
+                                $set('harga_kuota', $kuota->harga_jual);
+                            }
+                        })
                         ->label('ID Kuota'),
-                TextInput::make('nama_provider')->disabled()->label('Nama Provider'),
-                TextInput::make('nominal_paket')->disabled()->label('Nominal Paket'),
-                TextInput::make('masa_aktif')->disabled()->label('Masa Aktif'),
+                TextInput::make('nama_provider')->label('Nama Provider'),
+                TextInput::make('nominal_paket')->label('Nominal Paket'),
+                TextInput::make('masa_aktif')->label('Masa Aktif'),
                 TextInput::make('qty')
                     ->reactive()
                     ->afterStateUpdated(function (Set $set, $state, Get $get) {
@@ -75,13 +87,54 @@ class FakturResource extends Resource
                     ->reactive()
                     ->afterStateUpdated(function (Set $set, $state, Get $get) {
                         $subtotal = $get('subtotal');
-                        $set('subtotal', $state/100 * $subtotal);
+                        $nominalDiskon = $state/100;
+                        $set('subtotal', $subtotal*(1-$nominalDiskon));
                     })
                     ->numeric()
                     ->label('Diskon (%)'),
-                TextInput::make('harga_kuota')->disabled()->label('Harga Kuota'),
+                TextInput::make('harga_kuota')->label('Harga Kuota'),
+                TextInput::make('subtotal')->label('Subtotal'),
+                ])->label('Detail Kuota')
+                ->live(),
+                Repeater::make('detailAccessories')
+                    ->relationship()
+                    ->schema([
+                        Select::make('id_accessories')
+                        ->reactive()
+                        ->relationship(name: 'accessories', titleAttribute: 'id')
+                        ->afterStateUpdated(function($state, callable $set) {
+                            $accessories = Accessories::find($state);
+
+                            if($accessories) {
+                                $set('nama_acc', $accessories->nama_acc);
+                                $set('kategori', $accessories->kategori);
+                                $set('harga_accessories', $accessories->harga_jual);
+                            }
+                        })
+                        ->label('ID Accessories'),
+                TextInput::make('nama_acc')->label('Nama Accessories'),
+                TextInput::make('kategori')->label('Kategori'),
+                TextInput::make('qty')
+                    ->reactive()
+                    ->afterStateUpdated(function (Set $set, $state, Get $get) {
+                        $hargaKuota = $get('harga_accessories');
+                        $set('subtotal', $state * $hargaKuota);
+                    })
+                    ->numeric()
+                    ->label('Quantity'),
+                TextInput::make('diskon')
+                    ->reactive()
+                    ->afterStateUpdated(function (Set $set, $state, Get $get) {
+                        $subtotal = $get('subtotal');
+                        $nominalDiskon = $state/100;
+                        $set('subtotal', $subtotal*(1-$nominalDiskon));
+                    })
+                    ->numeric()
+                    ->label('Diskon (%)'),
+                TextInput::make('harga_accessories')->label('Harga Accessories'),
                 TextInput::make('subtotal')->label('Subtotal'),
                 ])
+                ->label('Detail Accessories')
                 ->live(),
                 TextInput::make('total_qty')->numeric()->label('Total Quantity'),
                 TextInput::make('total_harga')->numeric()->label('Total Harga'),

@@ -20,4 +20,9 @@ class Accessories extends Model
         'jumlah',
         'foto'
     ];
+
+    public function detailAccessories(): BelongsToMany
+    {
+        return $this->belongsToMany(DetailFakturKuota::class);
+    }
 }

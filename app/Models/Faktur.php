@@ -38,4 +38,9 @@ class Faktur extends Model
     {
         return $this->hasMany(DetailFakturKuota::class, 'id_faktur');
     }
+
+    public function detailAccessories(): HasMany
+    {
+        return $this->hasMany(DetailFakturAccessories::class, 'id_faktur');
+    }
 }
