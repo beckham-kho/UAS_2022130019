@@ -72,9 +72,9 @@ class FakturResource extends Resource
                             }
                         })
                         ->label('ID Kuota'),
-                TextInput::make('nama_provider')->label('Nama Provider'),
-                TextInput::make('nominal_paket')->label('Nominal Paket'),
-                TextInput::make('masa_aktif')->label('Masa Aktif'),
+                TextInput::make('nama_provider')->readOnly()->label('Nama Provider'),
+                TextInput::make('nominal_paket')->readOnly()->label('Nominal Paket'),
+                TextInput::make('masa_aktif')->readOnly()->label('Masa Aktif'),
                 TextInput::make('qty')
                     ->reactive()
                     ->afterStateUpdated(function (Set $set, $state, Get $get) {
@@ -92,9 +92,12 @@ class FakturResource extends Resource
                     })
                     ->numeric()
                     ->label('Diskon (%)'),
-                TextInput::make('harga_kuota')->label('Harga Kuota'),
-                TextInput::make('subtotal')->label('Subtotal'),
-                ])->label('Detail Kuota')
+                TextInput::make('harga_kuota')->readOnly()->label('Harga Kuota'),
+                TextInput::make('subtotal')->readOnly()->label('Subtotal'),
+                ])
+                ->label('Detail Kuota')
+                ->defaultItems(0)
+                ->collapsible()
                 ->dehydrated(false)
                 ->live(),
                 Repeater::make('detailAccessories')
@@ -112,9 +115,18 @@ class FakturResource extends Resource
                                 $set('harga_accessories', $accessories->harga_jual);
                             }
                         })
+                        ->afterStateHydrated(function($state, callable $set) {
+                            $accessories = Accessories::find($state);
+
+                            if($accessories) {
+                                $set('nama_acc', $accessories->nama_acc);
+                                $set('kategori', $accessories->kategori);
+                                $set('harga_accessories', $accessories->harga_jual);
+                            }
+                        })
                         ->label('ID Accessories'),
-                TextInput::make('nama_acc')->label('Nama Accessories'),
-                TextInput::make('kategori')->label('Kategori'),
+                TextInput::make('nama_acc')->readOnly()->label('Nama Accessories'),
+                TextInput::make('kategori')->readOnly()->label('Kategori'),
                 TextInput::make('qty')
                     ->reactive()
                     ->afterStateUpdated(function (Set $set, $state, Get $get) {
@@ -132,14 +144,42 @@ class FakturResource extends Resource
                     })
                     ->numeric()
                     ->label('Diskon (%)'),
-                TextInput::make('harga_accessories')->label('Harga Accessories'),
-                TextInput::make('subtotal')->label('Subtotal'),
+                TextInput::make('harga_accessories')->readOnly()->label('Harga Accessories'),
+                TextInput::make('subtotal')->readOnly()->label('Subtotal'),
                 ])
+                ->collapsible()
                 ->dehydrated(false)
+                ->defaultItems(0)
                 ->label('Detail Accessories')
                 ->live(),
-                TextInput::make('total_qty')->numeric()->label('Total Quantity'),
-                TextInput::make('total_harga')->numeric()->label('Total Harga'),
+                TextInput::make('total_qty')
+                    ->placeholder(function (Set $set, Get $get) {
+                        $qtyKuota = collect($get('detailKuota'))->pluck('qty')->sum();
+                        $qtyAcc = collect($get('detailAccessories'))->pluck('qty')->sum();
+
+                        if($qtyKuota == null && $qtyAcc == null) {
+                            $set('total_qty', 0);
+                        } else {
+                            $set('total_qty', $qtyKuota + $qtyAcc);
+                        }
+                    })
+                    ->numeric()
+                    ->readOnly()
+                    ->label('Total Quantity'),
+                TextInput::make('total_harga')
+                    ->placeholder(function (Set $set, Get $get) {
+                        $subtotalKuota = collect($get('detailKuota'))->pluck('subtotal')->sum();
+                        $subtotalAcc = collect($get('detailAccessories'))->pluck('subtotal')->sum();
+
+                        if($subtotalKuota == null && $subtotalAcc == null) {
+                            $set('total_harga', 0);
+                        } else {
+                            $set('total_harga', $subtotalKuota + $subtotalAcc);
+                        }
+                    })
+                    ->numeric()
+                    ->readOnly()
+                    ->label('Total Harga'),
             ]);
     }
 
@@ -158,9 +198,9 @@ class FakturResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
