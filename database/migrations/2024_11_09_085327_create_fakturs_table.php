@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('fakturs', function (Blueprint $table) {
             $table->id();
             $table->string('kode_trx');
-            $table->string('tanggal_trx');
+            $table->date('tanggal_trx');
             $table->foreignId('id_pelanggan')->constrained('pelanggans', 'id')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('id_kurir')->constrained('kurirs', 'id')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('total_qty');

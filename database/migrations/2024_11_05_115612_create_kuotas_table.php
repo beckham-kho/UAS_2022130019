@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nominal_paket');
             $table->string('masa_aktif');
             $table->integer('harga_jual');
-            $table->integer('harga_beli');
+            $table->integer('modal');
             $table->integer('jumlah')->nullable()->default(0);
         });
     }

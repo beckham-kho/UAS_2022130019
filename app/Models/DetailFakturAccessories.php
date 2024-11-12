@@ -18,6 +18,8 @@ class DetailFakturAccessories extends Model
         'kategori',
         'qty',
         'harga_accessories',
+        'harga_modal', //hidden
+        'subtotal_modal', //hidden
         'diskon',
         'subtotal'
     ];

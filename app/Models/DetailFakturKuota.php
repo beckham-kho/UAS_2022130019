@@ -19,6 +19,8 @@ class DetailFakturKuota extends Model
         'masa_aktif',
         'qty',
         'harga_kuota',
+        'harga_modal', //hidden
+        'subtotal_modal', //hidden
         'diskon',
         'subtotal'
     ];

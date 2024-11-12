@@ -18,7 +18,7 @@ class Kuota extends Model
         'nominal_paket',
         'masa_aktif',
         'harga_jual',
-        'harga_beli',
+        'modal',
         'jumlah'
     ];
 

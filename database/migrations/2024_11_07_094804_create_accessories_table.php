@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nama_acc');
             $table->string('kategori');
             $table->integer('harga_jual');
-            $table->integer('harga_beli');
+            $table->integer('modal');
             $table->integer('jumlah')->nullable()->default(0);
             $table->string('foto')->nullable();
         });

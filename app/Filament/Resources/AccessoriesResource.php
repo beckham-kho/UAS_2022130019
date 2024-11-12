@@ -42,7 +42,7 @@ class AccessoriesResource extends Resource
                     'Earphone Bluetooth' => 'Earphone Bluetooth',
                     ]),
                 TextInput::make('harga_jual')->numeric()->label('Harga Jual per pcs'),
-                TextInput::make('harga_beli')->numeric()->label('Harga Beli per pcs'),
+                TextInput::make('modal')->numeric()->label('Modal per pcs'),
                 TextInput::make('jumlah')->numeric(),
                 FileUpload::make('foto')->image(),
             ]);
@@ -56,7 +56,7 @@ class AccessoriesResource extends Resource
                 TextColumn::make('nama_acc')->searchable()->label('Nama'),
                 TextColumn::make('kategori')->sortable()->label('Kategori'),
                 TextColumn::make('harga_jual')->money('IDR')->label('Harga Jual per pcs'),
-                TextColumn::make('harga_beli')->money('IDR')->label('Harga Beli per pcs'),
+                TextColumn::make('modal')->money('IDR')->label('Modal per pcs'),
                 TextColumn::make('jumlah'),
                 ImageColumn::make('foto')->size(80),
             ])

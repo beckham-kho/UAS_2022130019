@@ -19,6 +19,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Set;
 use Filament\Forms\Get;
 use Filament\Forms\Components\Actions\Action;
@@ -59,6 +60,7 @@ class FakturResource extends Resource
                                 $set('nominal_paket', $kuota->nominal_paket);
                                 $set('masa_aktif', $kuota->masa_aktif);
                                 $set('harga_kuota', $kuota->harga_jual);
+                                $set('harga_modal', $kuota->modal);
                             }
                         })
                         ->afterStateHydrated(function($state, callable $set) {
@@ -69,17 +71,21 @@ class FakturResource extends Resource
                                 $set('nominal_paket', $kuota->nominal_paket);
                                 $set('masa_aktif', $kuota->masa_aktif);
                                 $set('harga_kuota', $kuota->harga_jual);
+                                $set('harga_modal', $kuota->modal);
                             }
                         })
                         ->label('ID Kuota'),
                 TextInput::make('nama_provider')->readOnly()->label('Nama Provider'),
                 TextInput::make('nominal_paket')->readOnly()->label('Nominal Paket'),
                 TextInput::make('masa_aktif')->readOnly()->label('Masa Aktif'),
+                Hidden::make('harga_modal'),
                 TextInput::make('qty')
                     ->reactive()
                     ->afterStateUpdated(function (Set $set, $state, Get $get) {
                         $hargaKuota = $get('harga_kuota');
+                        $hargaModalKuota = $get('harga_kuota');
                         $set('subtotal', $state * $hargaKuota);
+                        $set('subtotal_modal', $state * $hargaModalKuota);
                     })
                     ->numeric()
                     ->label('Quantity'),
@@ -93,6 +99,7 @@ class FakturResource extends Resource
                     ->numeric()
                     ->label('Diskon (%)'),
                 TextInput::make('harga_kuota')->readOnly()->label('Harga Kuota'),
+                Hidden::make('subtotal_modal'),
                 TextInput::make('subtotal')->readOnly()->label('Subtotal'),
                 ])
                 ->label('Detail Kuota')
@@ -113,6 +120,7 @@ class FakturResource extends Resource
                                 $set('nama_acc', $accessories->nama_acc);
                                 $set('kategori', $accessories->kategori);
                                 $set('harga_accessories', $accessories->harga_jual);
+                                $set('harga_modal', $accessories->modal);
                             }
                         })
                         ->afterStateHydrated(function($state, callable $set) {
@@ -122,16 +130,20 @@ class FakturResource extends Resource
                                 $set('nama_acc', $accessories->nama_acc);
                                 $set('kategori', $accessories->kategori);
                                 $set('harga_accessories', $accessories->harga_jual);
+                                $set('harga_modal', $accessories->modal);
                             }
                         })
                         ->label('ID Accessories'),
                 TextInput::make('nama_acc')->readOnly()->label('Nama Accessories'),
                 TextInput::make('kategori')->readOnly()->label('Kategori'),
+                Hidden::make('harga_modal'),
                 TextInput::make('qty')
                     ->reactive()
                     ->afterStateUpdated(function (Set $set, $state, Get $get) {
-                        $hargaKuota = $get('harga_accessories');
-                        $set('subtotal', $state * $hargaKuota);
+                        $hargaAccessories = $get('harga_accessories');
+                        $hargaModalAccessories = $get('harga_modal');
+                        $set('subtotal', $state * $hargaAccessories);
+                        $set('subtotal_modal', $state * $hargaModalAccessories);
                     })
                     ->numeric()
                     ->label('Quantity'),
@@ -145,6 +157,7 @@ class FakturResource extends Resource
                     ->numeric()
                     ->label('Diskon (%)'),
                 TextInput::make('harga_accessories')->readOnly()->label('Harga Accessories'),
+                Hidden::make('subtotal_modal'),
                 TextInput::make('subtotal')->readOnly()->label('Subtotal'),
                 ])
                 ->collapsible()
@@ -192,14 +205,13 @@ class FakturResource extends Resource
                 TextColumn::make('pelanggan.nama_konter')->label('Nama Konter'),
                 TextColumn::make('kurir.nama_kurir')->label('Nama Kurir'),
                 TextColumn::make('total_qty')->numeric()->label('Total Quantity'),
-                TextColumn::make('total_harga')->numeric()->label('Total Harga'),
+                TextColumn::make('total_harga')->numeric()->money('IDR')->label('Total Harga'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

@@ -41,7 +41,7 @@ class KuotaResource extends Resource
                 TextInput::make('nominal_paket')->label('Nominal Paket (GB)'),
                 TextInput::make('masa_aktif')->label('Masa Aktif (hari)'),
                 TextInput::make('harga_jual')->numeric()->label('Harga Jual per pcs'),
-                TextInput::make('harga_beli')->numeric()->label('Harga Beli per pcs'),
+                TextInput::make('modal')->numeric()->label('Modal per pcs'),
                 TextInput::make('jumlah')->numeric(),
             ]);
     }
@@ -55,7 +55,7 @@ class KuotaResource extends Resource
                 TextColumn::make('nominal_paket')->label('Nominal Paket (GB)'),
                 TextColumn::make('masa_aktif')->label('Masa Aktif (hari)'),
                 TextColumn::make('harga_jual')->money('IDR')->label('Harga Jual per pcs'),
-                TextColumn::make('harga_beli')->money('IDR')->label('Harga Beli per pcs'),
+                TextColumn::make('modal')->money('IDR')->label('Modal per pcs'),
                 TextColumn::make('jumlah'),
             ])
             ->filters([

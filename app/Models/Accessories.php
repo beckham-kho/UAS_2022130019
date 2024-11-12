@@ -16,7 +16,7 @@ class Accessories extends Model
         'nama_acc',
         'kategori',
         'harga_jual',
-        'harga_beli',
+        'modal',
         'jumlah',
         'foto'
     ];

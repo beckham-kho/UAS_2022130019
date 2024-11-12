@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('qty');
             $table->integer('diskon')->default(0);
             $table->integer('harga_accessories');
+            $table->integer('harga_modal'); //hidden
+            $table->integer('subtotal_modal'); //hidden
             $table->integer('subtotal');
             $table->timestamps();
         });
