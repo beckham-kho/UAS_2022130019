@@ -83,7 +83,7 @@ class FakturResource extends Resource
                     ->reactive()
                     ->afterStateUpdated(function (Set $set, $state, Get $get) {
                         $hargaKuota = $get('harga_kuota');
-                        $hargaModalKuota = $get('harga_kuota');
+                        $hargaModalKuota = $get('harga_modal');
                         $set('subtotal', $state * $hargaKuota);
                         $set('subtotal_modal', $state * $hargaModalKuota);
                     })
