@@ -11,7 +11,8 @@ use App\Models\DetailFakturAccessories;
 
 class WGrafikPendapatanBersih extends ChartWidget
 {
-    protected static ?string $heading = 'Statistik';
+    protected static ?string $heading = 'Grafik Omset';
+    protected static string $color = 'secondary';
 
     protected function getData(): array
     {
@@ -21,7 +22,7 @@ class WGrafikPendapatanBersih extends ChartWidget
         $dataOmset = Trend::model(Faktur::class)
             ->between(
                 start: now()->startOfMonth(),
-                end: now()->endOfMonth(),
+                end: now(),
             )
             ->perDay()
             ->sum('total_harga');
@@ -29,7 +30,7 @@ class WGrafikPendapatanBersih extends ChartWidget
         $nominalModalKuota = Trend::model(DetailFakturKuota::class)
         ->between(
             start: now()->startOfMonth(),
-            end: now()->endOfMonth(),
+            end: now(),
         )
         ->perDay()
         ->sum('subtotal_modal');
@@ -39,6 +40,8 @@ class WGrafikPendapatanBersih extends ChartWidget
                 [
                     'label' => 'Omset',
                     'data' => $dataOmset->map(fn (TrendValue $value) => $value->aggregate),
+                    'backgroundColor' => '#F0AD4E',
+                    'borderColor' => '#F0AD4E',
                 ],
             ],
             'labels' => $dataOmset->map(fn (TrendValue $value) => $value->date),
