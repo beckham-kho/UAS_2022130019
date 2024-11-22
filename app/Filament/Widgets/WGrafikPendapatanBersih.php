@@ -8,9 +8,12 @@ use Flowframe\Trend\TrendValue;
 use App\Models\Faktur;
 use App\Models\DetailFakturKuota;
 use App\Models\DetailFakturAccessories;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
+use Carbon\Carbon;
 
 class WGrafikPendapatanBersih extends ChartWidget
 {
+    use InteractsWithPageFilters;
     protected static ?string $heading = 'Grafik Omset';
     protected static string $color = 'secondary';
 
@@ -19,21 +22,16 @@ class WGrafikPendapatanBersih extends ChartWidget
         //pakai Trend
         //install composer require flowframe/laravel-trend
 
+        $startDate = $this->filters['tanggalAwal'] ?? null;
+        $endDate = $this->filters['tanggalAkhir'] ?? null;
+
         $dataOmset = Trend::model(Faktur::class)
             ->between(
-                start: now()->startOfMonth(),
-                end: now(),
+                start: $startDate ? Carbon:: parse($startDate) : now()->startOfMonth(),
+                end: $startDate ? Carbon:: parse($endDate) : now(),
             )
             ->perDay()
             ->sum('total_harga');
-
-        $nominalModalKuota = Trend::model(DetailFakturKuota::class)
-        ->between(
-            start: now()->startOfMonth(),
-            end: now(),
-        )
-        ->perDay()
-        ->sum('subtotal_modal');
 
         return [
             'datasets' => [
