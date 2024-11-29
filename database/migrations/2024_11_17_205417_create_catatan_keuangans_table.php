@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('catatan_keuangans', function (Blueprint $table) {
             $table->id();
-            $table->string('kode');
+            $table->string('kode_keuangan');
             $table->date('tanggal');
             $table->integer('nominal');
             $table->string('kategori');
