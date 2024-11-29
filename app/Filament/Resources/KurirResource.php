@@ -18,6 +18,7 @@ use Filament\Forms\Components\ToggleButtons;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Actions\Action;
 
 class KurirResource extends Resource
 {
@@ -78,6 +79,15 @@ class KurirResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->emptyStateHeading('Data kurir tidak ditemukan')
+            ->emptyStateDescription('Klik tombol dibawah ini untuk menambahkan data kurir')
+            ->emptyStateActions([
+                Action::make('create')
+                    ->label('Tambah Data Kurir')
+                    ->url(route('filament.admin.resources.kurir.create'))
+                    ->icon('heroicon-m-plus')
+                    ->button(),
             ]);
     }
 

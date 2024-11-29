@@ -22,7 +22,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Set;
 use Filament\Forms\Get;
-use Filament\Forms\Components\Actions\Action;
+use Filament\Tables\Actions\Action;
 
 class FakturResource extends Resource
 {
@@ -212,14 +212,18 @@ class FakturResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
+                //
+            ])
+            ->emptyStateHeading('Data faktur tidak ditemukan')
+            ->emptyStateDescription('Klik tombol dibawah ini untuk menambahkan data faktur')
+            ->emptyStateActions([
+                Action::make('create')
+                    ->label('Tambah Data Faktur')
+                    ->url(route('filament.admin.resources.faktur.create'))
+                    ->icon('heroicon-m-plus')
+                    ->button(),
             ]);
     }
 
@@ -235,7 +239,6 @@ class FakturResource extends Resource
         return [
             'index' => Pages\ListFakturs::route('/'),
             'create' => Pages\CreateFaktur::route('/create'),
-            'edit' => Pages\EditFaktur::route('/{record}/edit'),
         ];
     }
 

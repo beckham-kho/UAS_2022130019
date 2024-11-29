@@ -49,8 +49,8 @@ class Statistik extends BaseWidget
         $margin = checkDivisionZero($pendapatanBersih, $omset);
 
         return [
-            Stat::make('Omset', $omset),
-            Stat::make('Pendapatan Bersih', $pendapatanBersih),
+            Stat::make('Omset', 'Rp '.number_format($omset, 0, ',', '.')),
+            Stat::make('Pendapatan Bersih', 'Rp '.number_format($pendapatanBersih, 0, ',', '.')),
             Stat::make('Margin Pendapatan Bersih', $margin.'%'),
         ];
     }

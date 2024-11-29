@@ -18,6 +18,7 @@ use Filament\Forms\Components\ToggleButtons;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Actions\Action;
 
 class CatatanKeuanganResource extends Resource
 {
@@ -78,6 +79,15 @@ class CatatanKeuanganResource extends Resource
             ])
             ->bulkActions([
                 //
+            ])
+            ->emptyStateHeading('Catatan keuangan tidak ditemukan')
+            ->emptyStateDescription('Klik tombol dibawah ini untuk menambahkan catatan keuangan')
+            ->emptyStateActions([
+                Action::make('create')
+                    ->label('Tambah Data Kuota')
+                    ->url(route('filament.admin.resources.keuangan.create'))
+                    ->icon('heroicon-m-plus')
+                    ->button(),
             ]);
     }
 

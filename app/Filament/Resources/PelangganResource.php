@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\Action;
 
 class PelangganResource extends Resource
 {
@@ -59,6 +60,15 @@ class PelangganResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->emptyStateHeading('Data pelanggan tidak ditemukan')
+            ->emptyStateDescription('Klik tombol dibawah ini untuk menambahkan data pelanggan')
+            ->emptyStateActions([
+                Action::make('create')
+                    ->label('Tambah Data Pelanggan')
+                    ->url(route('filament.admin.resources.pelanggan.create'))
+                    ->icon('heroicon-m-plus')
+                    ->button(),
             ]);
     }
 

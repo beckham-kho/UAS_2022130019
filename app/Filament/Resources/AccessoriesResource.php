@@ -17,6 +17,7 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Actions\Action;
 
 class AccessoriesResource extends Resource
 {
@@ -40,6 +41,9 @@ class AccessoriesResource extends Resource
                     'Kabel Data' => 'Kabel Data',
                     'Earphone Kabel' => 'Earphone Kabel',
                     'Earphone Bluetooth' => 'Earphone Bluetooth',
+                    ])
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('kategori')
                     ]),
                 TextInput::make('harga_jual')->numeric()->label('Harga Jual per pcs'),
                 TextInput::make('modal')->numeric()->label('Modal per pcs'),
@@ -71,6 +75,15 @@ class AccessoriesResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->emptyStateHeading('Data accessories tidak ditemukan')
+            ->emptyStateDescription('Klik tombol dibawah ini untuk menambahkan data accessories')
+            ->emptyStateActions([
+                Action::make('create')
+                    ->label('Tambah Data Accessories')
+                    ->url(route('filament.admin.resources.accessories.create'))
+                    ->icon('heroicon-m-plus')
+                    ->button(),
             ]);
     }
 

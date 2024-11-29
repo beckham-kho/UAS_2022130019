@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\Action;
 
 class KuotaResource extends Resource
 {
@@ -69,8 +70,17 @@ class KuotaResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->emptyStateHeading('Data kuota tidak ditemukan')
+            ->emptyStateDescription('Klik tombol dibawah ini untuk menambahkan data kuota')
+            ->emptyStateActions([
+                Action::make('create')
+                    ->label('Tambah Data Kuota')
+                    ->url(route('filament.admin.resources.kuota.create'))
+                    ->icon('heroicon-m-plus')
+                    ->button(),
             ]);
-    }
+        }
 
     public static function getRelations(): array
     {

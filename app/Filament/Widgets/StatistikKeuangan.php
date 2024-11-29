@@ -34,9 +34,9 @@ class StatistikKeuangan extends BaseWidget
             ->sum('nominal');
 
         return [
-            Stat::make('Total Tambahan Dana', $tambahahanDana),
-            Stat::make('Pemasukan', $pemasukan),
-            Stat::make('Pengeluaran', $pengeluaran),
+            Stat::make('Total Tambahan Dana', 'Rp '.number_format($tambahahanDana, 0, ',', '.')),
+            Stat::make('Pemasukan', 'Rp '.number_format($pemasukan, 0, ',', '.')),
+            Stat::make('Pengeluaran', 'Rp '.number_format($pengeluaran, 0, ',', '.')),
         ];
     }
 }
